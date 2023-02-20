@@ -1,16 +1,17 @@
 import { Form, Label, Input, Button} from './ContactForm.styled'
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addContacts } from '../../redux/contactsSlice'
 import { useSelector } from 'react-redux';
-import { getcontacts } from 'redux/selectors';
+import { getContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations'
+
 
 export function ContactForm () {
   const [name, setName] =useState('')
-  const [number, setNumber] = useState('')
+  const [phone, setPhone] = useState('')
 
   const dispatch = useDispatch();
-  const contacts = useSelector(getcontacts)
+  const contacts = useSelector(getContacts)
   
 const handleSubmit = event => {
   event.preventDefault();
@@ -18,7 +19,8 @@ const handleSubmit = event => {
   if (isNameInContacts) {
     alert(`${name} is already in contacts`)
   } else {
-    dispatch(addContacts(name, number))
+    const contact = {name, phone}
+    dispatch(addContact(contact))
   }
     reset();
   };
@@ -30,8 +32,8 @@ const handelInputChange = (e) => {
         setName(e.currentTarget.value)
         break;
       
-       case 'number':
-        setNumber(e.currentTarget.value)
+       case 'phone':
+        setPhone(e.currentTarget.value)
         break;
     
       default:
@@ -40,7 +42,7 @@ const handelInputChange = (e) => {
          
    const reset = () => {
      setName('')
-     setNumber('')
+     setPhone('')
     }
     
     return (<Form onSubmit={handleSubmit}>
@@ -57,11 +59,11 @@ const handelInputChange = (e) => {
           <Label htmlFor=""> number
             <Input
              type="tel"
-              name="number"
+              name="phone"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
-              value={number}
+              value={phone}
               onChange={handelInputChange}
                 />
           </Label>
